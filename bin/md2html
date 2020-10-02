@@ -1,0 +1,93 @@
+#!/usr/bin/env ruby
+require 'pathname'
+require 'nokogiri'
+require 'redcarpet'
+require 'base64'
+require 'net/http'
+require 'yaml'
+
+require 'byebug'
+
+PROJECT_DIR = File.join(File.dirname(__FILE__),"../")
+
+def embed_images
+  @doc.xpath('//img').each do |img|
+    img.attribute_nodes.each do |att|
+      if att.name == "src"
+        d = encode_image(att.value)
+        att.value = d
+      end
+    end
+  end
+end
+
+def css
+  File.read(File.join(PROJECT_DIR,"style.css"))
+end
+
+def metadata
+  f = File.join(PROJECT_DIR,"out/metadata.yml")
+  YAML.load(File.read(f))
+end
+
+def decorate
+  @doc.at('body').add_previous_sibling('<head></head>')
+  @doc.at('head').add_child("<title>#{@doc.at('h1').content}</title>")
+  metadata.each {|k,v| @doc.at('head').add_child("<meta name=\"#{k}\" content=\"#{v}\">")}
+  @doc.at('head').add_child("<style>\n#{css}\n</style>")
+
+  @doc.xpath("//img").each do |i|
+    i = i.wrap('<div class="picture">')
+    alt = i.attributes["alt"].value
+    i.parent.add_child('<div class="caption">' + alt + '</div>')
+  end
+  @doc.xpath("//code").each do |c|
+    c.content.strip
+    c.parent.add_class("code")
+  end
+end
+
+def absolute_path p
+  p = Pathname.new(p)
+  p = File.join(DOCUMENT_DIR,p) if p.relative?
+  p
+end
+
+def mime_type p
+  case p.split(".").last
+  when "jpg"
+    "image/jpeg"
+  when "png"
+    "image/png"
+  end
+end
+
+def encode_image p
+  if File.exist?(absolute_path(p))
+    d = Base64.encode64(File.read(absolute_path(p)))
+    m = mime_type(p)
+  else
+    uri = URI.parse(p)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true if uri.scheme == "https"
+    d = Base64.encode64(http.get(uri.path).body)
+    m = mime_type(uri.path)
+  end
+  return "data:#{m};base64,#{d}"
+end
+
+markdown = File.read(ARGV[0])
+html = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(markdown)
+
+DOCUMENT_DIR = File.dirname(ARGV[0])
+@doc = Nokogiri::HTML('<div id="container">' + html + '</div>')
+
+#embed_images
+decorate
+
+case ARGV.length
+when 1
+  puts @doc
+when 2
+  File.open(ARGV[1],'w') { |f| f.puts @doc }
+end

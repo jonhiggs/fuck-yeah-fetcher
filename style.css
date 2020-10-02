@@ -11,6 +11,11 @@ body {
   line-height: 1.8;
 }
 
+#footer {
+  font-size: 15;
+  border-top: 1px solid #666;
+}
+
 .code {
   padding-left: 20px;
   padding-bottom: 20px;

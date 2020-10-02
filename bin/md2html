@@ -30,11 +30,20 @@ def metadata
   YAML.load(File.read(f))
 end
 
+def footer
+  s = metadata["original-source"]
+  "<ul>
+  <li>Source: <a href=\"#{s}\">#{s}</a>
+  <li>Date: #{metadata["date"]}
+  </ul>"
+end
+
 def decorate
   @doc.at('body').add_previous_sibling('<head></head>')
   @doc.at('head').add_child("<title>#{@doc.at('h1').content}</title>")
   metadata.each {|k,v| @doc.at('head').add_child("<meta name=\"#{k}\" content=\"#{v}\">")}
   @doc.at('head').add_child("<style>\n#{css}\n</style>")
+  @doc.xpath('//*[@id="container"]').first.add_child("<div id=\"footer\">#{footer}</div>")
 
   @doc.xpath("//img").each do |i|
     i = i.wrap('<div class="picture">')

@@ -110,7 +110,7 @@ html = Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(markdown)
 DOCUMENT_DIR = File.dirname(ARGV[0])
 @doc = Nokogiri::HTML('<div id="container">' + html + '</div>')
 
-#embed_images
+embed_images
 decorate
 
 case ARGV.length

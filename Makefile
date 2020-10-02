@@ -11,6 +11,12 @@ save: out/doc.html
 	echo '${filename}'
 	cp out/doc.html ${dest}
 
+edit: out/doc.md
+	${EDITOR} $<
+
+preview: out/doc.html
+	ropen $<
+
 out/source.html:
 	curl ${URL} > $@
 
@@ -24,7 +30,7 @@ out/doc.md: out/source.html
 		--data-urlencode html@$< \
 		> $@
 
-out/doc.html: out/doc.md
+out/doc.html: out/doc.md out/metadata.yml
 	bin/md2html $< > $@
 
 clean:

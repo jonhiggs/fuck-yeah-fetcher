@@ -25,23 +25,42 @@ def css
   File.read(File.join(PROJECT_DIR,"style.css"))
 end
 
+
+def title
+  @doc.at('h1').content
+end
+
+def date
+  metadata["date"]
+end
+
+def filename
+  "#{date}-#{title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '')}.html"
+end
+
+def source
+  metadata["source"]
+end
+
 def metadata
   f = File.join(PROJECT_DIR,"out/metadata.yml")
   YAML.load(File.read(f))
 end
 
 def footer
-  s = metadata["original-source"]
   "<ul>
-  <li>Source: <a href=\"#{s}\">#{s}</a>
-  <li>Date: #{metadata["date"]}
+  <li>Source: <a href=\"#{source}\">#{source}</a>
+  <li>Date: #{date}
+  <li>Filename: #{filename}
   </ul>"
 end
 
 def decorate
   @doc.at('body').add_previous_sibling('<head></head>')
-  @doc.at('head').add_child("<title>#{@doc.at('h1').content}</title>")
-  metadata.each {|k,v| @doc.at('head').add_child("<meta name=\"#{k}\" content=\"#{v}\">")}
+  @doc.at('head').add_child("<title>#{title}</title>")
+  @doc.at('head').add_child("<meta name=\"date\" content=\"#{date}\">")
+  @doc.at('head').add_child("<meta name=\"original-source\" content=\"#{source}\">")
+  @doc.at('head').add_child("<meta name=\"filename\" content=\"#{filename}\">")
   @doc.at('head').add_child("<style>\n#{css}\n</style>")
   @doc.xpath('//*[@id="container"]').first.add_child("<div id=\"footer\">#{footer}</div>")
 

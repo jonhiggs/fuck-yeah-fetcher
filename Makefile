@@ -12,7 +12,7 @@ save: out/doc.html
 	echo '${filename}'
 	cp out/doc.html ${dest}
 
-edit: out/doc.md
+edit: out/doc.md out/metadata.yml
 	${EDITOR} $<
 
 preview: out/doc.html
@@ -31,7 +31,7 @@ out/doc.md: out/source.html
 		--data-urlencode html@$< \
 		> $@
 
-out/doc.html: out/doc.md out/metadata.yml
+out/doc.html: out/doc.md out/metadata.yml style.css
 	bin/md2html $< > $@
 
 clean:

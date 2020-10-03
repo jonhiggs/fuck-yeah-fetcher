@@ -33,7 +33,6 @@ code {
 
 .picture {
   padding: 5px;
-  padding-top: 15px;
   background-color: #333;
   border: 1px solid #666;
   margin: 20px;
@@ -70,6 +69,7 @@ h1, h2, h3, h4, h5, h6, h7 {
   color: white;
   margin-top: 60px;
   margin-bottom: 0px;
+  text-transform: capitalize;
 }
 
 table {

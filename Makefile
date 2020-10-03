@@ -35,4 +35,4 @@ out/doc.html: out/doc.md out/metadata.yml
 	bin/md2html $< > $@
 
 clean:
-	rm -f source.* out.*
+	rm -f out/*

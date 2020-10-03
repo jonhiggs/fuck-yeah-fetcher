@@ -2,6 +2,7 @@
 export URL
 
 OUTPUT_DIR = ${HOME}/Documents/webpages/single-html
+USER_AGENT = Mozilla/5.0 (Windows NT 5.1; rv:7.0.1) Gecko/20100101 Firefox/7.0.1
 
 markdown:
 	$(MAKE) out/doc.md
@@ -18,7 +19,7 @@ preview: out/doc.html
 	ropen $<
 
 out/source.html:
-	curl ${URL} > $@
+	curl -A '${USER_AGENT}' ${URL} > $@
 
 out/metadata.yml:
 	# https://github.com/kevinSuttle/html-meta-tags

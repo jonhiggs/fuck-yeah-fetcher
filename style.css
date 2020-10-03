@@ -53,6 +53,18 @@ code {
   min-height: 10px;
 }
 
+a {
+  color: #6871ff;
+}
+
+a:active {
+  color: red;
+}
+
+a:visited {
+  color: #6871ff;
+}
+
 h1, h2, h3, h4, h5, h6, h7 {
   line-height: 1.0;
   color: white;

@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 .DELETE_ON_ERROR:
 export URL
 
@@ -9,7 +10,6 @@ markdown:
 
 save: dest = ${OUTPUT_DIR}/$(shell xidel --xpath '//meta[@name="filename"]/@content' $< 2>/dev/null)
 save: out/doc.html
-	echo '${filename}'
 	cp out/doc.html ${dest}
 
 edit: out/doc.md out/metadata.yml
@@ -20,6 +20,7 @@ preview: out/doc.html
 
 out/source.html:
 	curl -A '${USER_AGENT}' ${URL} > $@
+	[[ -s $@ ]]
 
 out/metadata.yml:
 	# https://github.com/kevinSuttle/html-meta-tags

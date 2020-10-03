@@ -39,7 +39,7 @@ def filename
 end
 
 def source
-  metadata["source"]
+  URI.parse(metadata["source"])
 end
 
 def metadata
@@ -49,7 +49,7 @@ end
 
 def footer
   "<ul>
-  <li>Source: <a href=\"#{source}\">#{source}</a>
+  <li>Source: <a href=\"#{source.to_s}\">#{source.to_s}</a>
   <li>Date: #{date}
   <li>Filename: #{filename}
   </ul>"
@@ -59,7 +59,7 @@ def decorate
   @doc.at('body').add_previous_sibling('<head></head>')
   @doc.at('head').add_child("<title>#{title}</title>")
   @doc.at('head').add_child("<meta name=\"date\" content=\"#{date}\">")
-  @doc.at('head').add_child("<meta name=\"original-source\" content=\"#{source}\">")
+  @doc.at('head').add_child("<meta name=\"original-source\" content=\"#{source.to_s}\">")
   @doc.at('head').add_child("<meta name=\"filename\" content=\"#{filename}\">")
   @doc.at('head').add_child("<style>\n#{css}\n</style>")
   @doc.xpath('//*[@id="container"]').first.add_child("<div id=\"footer\">#{footer}</div>")

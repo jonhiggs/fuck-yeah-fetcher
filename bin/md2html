@@ -81,6 +81,21 @@ def absolute_path p
   p
 end
 
+def fully_qualify_url p
+  if p =~ /^http/
+    URI.parse(p)
+  elsif p =~ /^\//
+    URI.parse("#{source.scheme}://#{source.hostname}#{p}")
+  else
+    if source.path =~ /\.html?$/
+      p = File.join(File.dirname(source.path),p)
+    else
+      p = File.join(source.path,p)
+    end
+    URI.parse("#{source.scheme}://#{source.hostname}#{p}")
+  end
+end
+
 def mime_type p
   case p.split(".").last
   when "jpg"
@@ -95,7 +110,7 @@ def encode_image p
     d = Base64.encode64(File.read(absolute_path(p)))
     m = mime_type(p)
   else
-    uri = URI.parse(p)
+    uri = fully_qualify_url(p)
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = true if uri.scheme == "https"
     d = Base64.encode64(http.get(uri.path).body)

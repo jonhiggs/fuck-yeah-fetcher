@@ -4,6 +4,7 @@ export URL
 
 OUTPUT_DIR = ${HOME}/Documents/webpages/single-html
 USER_AGENT = Mozilla/5.0 (Windows NT 5.1; rv:7.0.1) Gecko/20100101 Firefox/7.0.1
+OPEN_CMD = open
 
 markdown:
 	$(MAKE) out/doc.md
@@ -16,7 +17,7 @@ edit: out/doc.md out/metadata.yml
 	${EDITOR} $<
 
 preview: out/doc.html
-	ropen $<
+	${OPEN_CMD} $<
 
 out/source.html:
 	curl -A '${USER_AGENT}' ${URL} > $@

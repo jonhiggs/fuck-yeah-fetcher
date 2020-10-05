@@ -49,7 +49,7 @@ code {
   color: #ccc;
   font-size: 15;
   text-align: center;
-  min-height: 10px;
+  min-height: 0px;
 }
 
 a {

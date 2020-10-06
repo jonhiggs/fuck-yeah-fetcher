@@ -36,6 +36,7 @@ out/metadata.yml:
 out/doc.md: out/source-lite.html
 	curl -XPOST http://fuckyeahmarkdown.com/go/ \
 		--data-urlencode html@$< \
+		| awk '/^\[[0-9]+\]:/ {$$0=$$1" "$$2} { print }' \
 		> $@
 
 out/doc.html: out/doc.md out/metadata.yml style/style.css

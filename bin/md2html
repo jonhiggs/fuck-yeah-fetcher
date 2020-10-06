@@ -21,6 +21,17 @@ def embed_images
   end
 end
 
+def fix_links
+  @doc.xpath('//a').each do |img|
+    img.attribute_nodes.each do |att|
+      if att.name == "href"
+        d = fully_qualify_url(att.value)
+        att.value = d.to_s
+      end
+    end
+  end
+end
+
 def css
   File.read(File.join(PROJECT_DIR,"style/style.css"))
 end
@@ -125,6 +136,7 @@ html = Redcarpet::Markdown.new(Redcarpet::Render::HTML, :tables => true).render(
 DOCUMENT_DIR = File.dirname(ARGV[0])
 @doc = Nokogiri::HTML('<div id="container">' + html + '</div>')
 
+fix_links
 embed_images
 decorate
 

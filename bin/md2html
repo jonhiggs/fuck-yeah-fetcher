@@ -22,7 +22,7 @@ def embed_images
 end
 
 def css
-  File.read(File.join(PROJECT_DIR,"style.css"))
+  File.read(File.join(PROJECT_DIR,"style/style.css"))
 end
 
 

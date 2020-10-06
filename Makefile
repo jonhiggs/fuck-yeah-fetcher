@@ -33,7 +33,7 @@ out/doc.md: out/source.html
 		--data-urlencode html@$< \
 		> $@
 
-out/doc.html: out/doc.md out/metadata.yml style.css
+out/doc.html: out/doc.md out/metadata.yml style/style.css
 	bin/md2html $< > $@
 
 clean:

@@ -45,6 +45,10 @@ def date
   metadata["date"]
 end
 
+def author
+  metadata["author"]
+end
+
 def filename
   "#{date}-#{title.downcase.strip.gsub(' ', '-').gsub(/[^\w-]/, '').gsub(/-+/,'-')}.html"
 end
@@ -60,6 +64,7 @@ end
 
 def footer
   "<ul>
+  <li>Author: #{author || "unknown"}
   <li>Source: <a href=\"#{source.to_s}\">#{source.to_s}</a>
   <li>Date: #{date}
   <li>Filename: #{filename}

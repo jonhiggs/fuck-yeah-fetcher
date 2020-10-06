@@ -47,6 +47,7 @@ def date
 end
 
 def created
+  return nil if metadata["created"].nil?
   d = metadata["created"]
   d = Date.parse(d) if d.class == String
   d
@@ -74,7 +75,7 @@ def footer
   f.add_child("<li>Author: #{author}")
   f.add_child("<li>Source: <a href=\"#{source.to_s}\">#{source.to_s}</a>")
   f.add_child("<li>Date: #{date.iso8601}")
-  f.add_child("<li>Created: #{created.iso8601}")
+  f.add_child("<li>Created: #{created.iso8601}") unless created.nil?
   f.to_s
 end
 
@@ -83,7 +84,7 @@ def decorate
   @doc.at('head').add_child("<title>#{title}</title>")
   @doc.at('head').add_child("<meta name=\"author\" content=\"#{author}\">") unless author.nil?
   @doc.at('head').add_child("<meta name=\"date\" content=\"#{date.iso8601}\">")
-  @doc.at('head').add_child("<meta name=\"created\" content=\"#{created.iso8601}\">")
+  @doc.at('head').add_child("<meta name=\"created\" content=\"#{created.iso8601}\">") unless created.nil?
   @doc.at('head').add_child("<meta name=\"original-source\" content=\"#{source.to_s}\">")
   @doc.at('head').add_child("<meta name=\"filename\" content=\"#{filename}\">")
   @doc.at('head').add_child("<style>\n#{css}\n</style>")

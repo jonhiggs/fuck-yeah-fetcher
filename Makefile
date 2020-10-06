@@ -23,12 +23,15 @@ out/source.html:
 	curl -A '${USER_AGENT}' ${URL} > $@
 	[[ -s $@ ]]
 
+out/source-lite.html: out/source.html
+	bin/htmlite $< > $@
+
 out/metadata.yml:
 	# https://github.com/kevinSuttle/html-meta-tags
 	echo 'source:  ${URL}'                   >> $@
 	echo 'date:    $(shell date --iso-8601)' >> $@
 
-out/doc.md: out/source.html
+out/doc.md: out/source-lite.html
 	curl -XPOST http://fuckyeahmarkdown.com/go/ \
 		--data-urlencode html@$< \
 		> $@

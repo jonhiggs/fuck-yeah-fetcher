@@ -28,8 +28,10 @@ out/source-lite.html: out/source.html
 
 out/metadata.yml:
 	# https://github.com/kevinSuttle/html-meta-tags
-	echo 'source:  ${URL}'                   >> $@
+	echo 'author:'                           >> $@
+	echo 'created:'                          >> $@
 	echo 'date:    $(shell date --iso-8601)' >> $@
+	echo 'source:  ${URL}'                   >> $@
 
 out/doc.md: out/source-lite.html
 	curl -XPOST http://fuckyeahmarkdown.com/go/ \
